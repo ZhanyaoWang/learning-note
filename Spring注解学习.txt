@@ -1,1 +1,2 @@
 Configuration:
+	bean初始化
