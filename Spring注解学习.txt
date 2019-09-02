@@ -1,2 +1,7 @@
-Configuration:
-	bean初始化
+@Configuration:
+	@Configuration用于定义配置类，可替换xml配置文件，被注解的类内部包含有一个或多个被@Bean注解的方法，这些方法将会被AnnotationConfigApplicationContext或AnnotationConfigWebApplicationContext类进行扫描，并用于构建bean定义，初始化Spring容器。
+
+
+
+@Order:
+	指定Component组件启动的顺序，优先级越小越优先默认为int的最大值，即默认都按最低优先级启动。
