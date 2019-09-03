@@ -5,3 +5,69 @@
 
 @Order:
 	指定Component组件启动的顺序，优先级越小越优先默认为int的最大值，即默认都按最低优先级启动。
+
+spring ehcache:
+	1、引入maven依赖
+	  <!--开启 cache 缓存-->
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-cache</artifactId>
+      </dependency>
+      <!-- ehcache 缓存 -->
+      <dependency>
+          <groupId>net.sf.ehcache</groupId>
+          <artifactId>ehcache</artifactId>
+      </dependency>
+    2、引入配置文件ehcache.xml（resource文件夹）
+	    <?xml version="1.0" encoding="UTF-8"?>
+		<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		         xsi:noNamespaceSchemaLocation="../config/ehcache.xsd">
+
+		    <diskStore path="java.io.tmpdir"/>
+
+		    <!--defaultCache:echcache的默认缓存策略  -->
+		    <defaultCache
+		            maxElementsInMemory="10000"
+		            eternal="false"
+		            timeToIdleSeconds="120"
+		            timeToLiveSeconds="120"
+		            maxElementsOnDisk="10000000"
+		            diskExpiryThreadIntervalSeconds="120"
+		            memoryStoreEvictionPolicy="LRU">
+		        <persistence strategy="localTempSwap"/>
+		    </defaultCache>
+		    <cache name="users"
+		           maxElementsInMemory="10000"
+		           eternal="false"
+		           timeToIdleSeconds="10"
+		           timeToLiveSeconds="10"
+		           maxElementsOnDisk="10000000"
+		           diskExpiryThreadIntervalSeconds="120"
+		           memoryStoreEvictionPolicy="LRU">
+		        <persistence strategy="localTempSwap"/>
+		    </cache>
+		</ehcache>
+	3、创建ehcache配置类型EhcacheConfiguration，@EnableCaching启用缓存功能，并制定ehcache.xml位置
+	4、在需要使用缓存的方法上使用注解@Cacheable(value = "users")
+
+
+
+spring jpa:
+	1、引入jpa和数据库连接依赖：
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+	2、配置数据库连接
+		spring:
+		  dataSource:
+		    driverClassName: com.mysql.cj.jdbc.Driver
+		    url: jdbc:mysql://172.18.137.247:3306/pay_juhe?useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true
+		    username: root
+		    password: 123456
+	3、定义数据库表对于的Entity类，以及jpa接口类，例如SysUserEntity、SystemUserJpa
+	4、使用@Autowired注解SystemUserJpa进行注入，然后进行数据库操作
